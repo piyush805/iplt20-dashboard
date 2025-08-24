@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@config "../../tailwind.config.js";
+
+:root {
+  /* IPL Vista Design System - Light Mode */
+  --primary: 220 85% 25%; /* Deep IPL Blue */
+  --primary-glow: 220 85% 35%; /* Glow variant */
+  --secondary: 25 95% 55%; /* IPL Orange */
+  --background: 220 25% 97%; /* Clean White/Light */
+  --foreground: 230 15% 15%; /* Deep Navy Text */
+  --card: 0 0% 100%; /* Pure White */
+  --card-foreground: 230 15% 15%;
+  --muted: 220 15% 90%;
+  --muted-foreground: 220 10% 40%;
+  --border: 220 15% 85%;
+  --ring: 220 85% 25%;
+
+  /* Status Colors */
+  --live: 120 65% 45%; /* Green for Live Matches */
+  --upcoming: 45 85% 55%; /* Orange for Upcoming */
+  --completed: 230 10% 45%; /* Muted Gray for Completed */
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-elegant: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 20px rgb(220 85% 25% / 0.3);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    135deg,
+    hsl(220 85% 25%),
+    hsl(220 85% 35%)
+  );
+  --gradient-hero: linear-gradient(135deg, hsl(220 85% 25%), hsl(25 95% 55%));
+  --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(220 25% 97%));
+}
+
+.dark {
+  /* IPL Vista Design System - Dark Mode */
+  --background: 230 25% 8%; /* Dark Navy */
+  --foreground: 0 0% 98%; /* Light Text */
+  --card: 230 20% 12%; /* Darker Navy */
+  --card-foreground: 0 0% 98%;
+  --muted: 230 20% 15%;
+  --muted-foreground: 230 10% 60%;
+  --border: 230 20% 20%;
+  --ring: 220 85% 35%;
+
+  /* Adjusted status colors for dark mode */
+  --live: 120 65% 50%;
+  --upcoming: 45 85% 60%;
+  --completed: 230 10% 55%;
+
+  /* Dark mode shadows */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-elegant: 0 10px 15px -3px rgb(0 0 0 / 0.3),
+    0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-glow: 0 0 20px rgb(220 85% 35% / 0.4);
+
+  /* Dark mode gradients */
+  --gradient-card: linear-gradient(135deg, hsl(230 20% 12%), hsl(230 25% 15%));
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Custom animations */
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

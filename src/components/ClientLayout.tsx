@@ -1,13 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import SimpleNavigation from "@/components/SimpleNavigation";
-import { Suspense } from "react";
-
-function NavigationWithTheme() {
-  // This will be loaded after hydration
-  return <SimpleNavigation />;
-}
+import Navigation from "@/components/Navigation";
 
 export default function ClientLayout({
   children,
@@ -16,9 +10,7 @@ export default function ClientLayout({
 }) {
   return (
     <ThemeProvider>
-      <Suspense fallback={<SimpleNavigation />}>
-        <NavigationWithTheme />
-      </Suspense>
+      <Navigation />
       <main className="min-h-[calc(100vh-4rem)]">{children}</main>
     </ThemeProvider>
   );

@@ -73,7 +73,47 @@ module.exports = {
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
       },
+
+      // Extended spacing for better design system
+      spacing: {
+        18: "4.5rem",
+        88: "22rem",
+      },
+
+      // Extended z-index for proper layering
+      zIndex: {
+        60: "60",
+        70: "70",
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    // Custom plugin for IPL-specific utilities
+    function ({ addUtilities, theme }) {
+      const newUtilities = {
+        ".bg-gradient-primary": {
+          background: "var(--gradient-primary)",
+        },
+        ".bg-gradient-hero": {
+          background: "var(--gradient-hero)",
+        },
+        ".bg-gradient-card": {
+          background: "var(--gradient-card)",
+        },
+        ".shadow-card": {
+          boxShadow: "var(--shadow-card)",
+        },
+        ".shadow-elegant": {
+          boxShadow: "var(--shadow-elegant)",
+        },
+        ".shadow-glow": {
+          boxShadow: "var(--shadow-glow)",
+        },
+        ".border-border": {
+          borderColor: "hsl(var(--border))",
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };

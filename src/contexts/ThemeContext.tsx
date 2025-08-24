@@ -18,41 +18,64 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem("ipl-dashboard-theme") as Theme;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      // Check system preference
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setTheme(prefersDark ? "dark" : "light");
+    try {
+      const savedTheme = localStorage.getItem("ipl-dashboard-theme") as Theme;
+      if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
+        setTheme(savedTheme);
+      } else {
+        // Check system preference
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        setTheme(prefersDark ? "dark" : "light");
+      }
+    } catch (error) {
+      // Fallback to light theme if localStorage is not available
+      setTheme("light");
     }
     setMounted(true);
   }, []);
 
   // Apply theme to document
   useEffect(() => {
-    if (mounted) {
+    if (mounted && typeof document !== "undefined") {
       document.documentElement.classList.remove("light", "dark");
       document.documentElement.classList.add(theme);
-      localStorage.setItem("ipl-dashboard-theme", theme);
+      try {
+        localStorage.setItem("ipl-dashboard-theme", theme);
+      } catch (error) {
+        // Ignore localStorage errors
+      }
     }
   }, [theme, mounted]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  // Prevent hydration mismatch
+  // Prevent hydration mismatch by rendering the same structure
   if (!mounted) {
-    return <div className="opacity-0">{children}</div>;
+    return (
+      <ThemeContext.Provider
+        value={{
+          theme: "light",
+          toggleTheme: () => {},
+          isDark: false,
+        }}
+      >
+        {children}
+      </ThemeContext.Provider>
+    );
   }
 
   return (
-    <ThemeContext.Provider value={{ 
-      theme, 
-      toggleTheme, 
-      isDark: theme === "dark" 
-    }}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        toggleTheme,
+        isDark: theme === "dark",
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
@@ -62,9 +85,9 @@ export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     // Return default values instead of throwing error during SSR
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return {
-        theme: 'light' as Theme,
+        theme: "light" as Theme,
         toggleTheme: () => {},
         isDark: false,
       };

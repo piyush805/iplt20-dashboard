@@ -26,7 +26,7 @@ export default function BackgroundCarousel() {
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden z-0">
       {backgrounds.map((bg, index) => (
         <div
           key={bg}

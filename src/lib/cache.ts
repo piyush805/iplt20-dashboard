@@ -35,11 +35,11 @@ export class MemoryCache implements Cache {
   // Helper method to clear expired entries
   cleanup(): void {
     const now = Date.now();
-    for (const [key, entry] of this.store.entries()) {
+    this.store.forEach((entry, key) => {
       if (now > entry.expiresAt) {
         this.store.delete(key);
       }
-    }
+    });
   }
 
   // Get current cache size (for debugging)

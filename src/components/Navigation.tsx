@@ -15,7 +15,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-gradient-primary/95 backdrop-blur-md shadow-elegant border-b border-border sticky top-0 z-50 transition-all duration-300">
+    <nav className="bg-card/50 backdrop-blur-md shadow-elegant border-b border-border sticky top-0 z-50 transition-all duration-300">
       <div className="px-4 sm:px-6 lg:px-8 max-w-container mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* IPL Vista Logo */}
@@ -36,10 +36,10 @@ export default function Navigation() {
               </svg>
             </div>
             <div className="hidden sm:block">
-              <span className="text-2xl font-bold text-white">
+              <span className="text-2xl font-bold text-foreground">
                 IPL <span className="text-secondary">Vista</span>
               </span>
-              <div className="text-xs text-white/80 -mt-1">
+              <div className="text-xs text-muted-foreground -mt-1">
                 Live Cricket Dashboard
               </div>
             </div>
@@ -50,7 +50,7 @@ export default function Navigation() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300 mr-3 backdrop-blur-sm"
+              className="p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300 mr-3 backdrop-blur-sm"
               title={`Switch to ${isDark ? "light" : "dark"} mode`}
             >
               {isDark ? (
@@ -94,8 +94,8 @@ export default function Navigation() {
                   target={isExternal ? "_blank" : undefined}
                   className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 backdrop-blur-sm ${
                     isActive
-                      ? "bg-white/20 text-white shadow-glow ring-1 ring-white/30"
-                      : "text-white/80 hover:text-white hover:bg-white/10"
+                      ? "bg-primary/20 text-foreground shadow-glow ring-1 ring-primary/30"
+                      : "text-muted-foreground hover:text-foreground hover:bg-primary/10"
                   }`}
                 >
                   <span className="hidden lg:inline">{item.label}</span>
@@ -110,7 +110,7 @@ export default function Navigation() {
             {/* Mobile Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+              className="p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm"
               title={`Switch to ${isDark ? "light" : "dark"} mode`}
             >
               {isDark ? (
@@ -160,7 +160,7 @@ function MobileNavigation({
 }) {
   return (
     <div className="relative group">
-      <button className="p-2.5 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
+      <button className="p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm">
         <svg
           className="w-6 h-6"
           fill="none"
@@ -177,7 +177,7 @@ function MobileNavigation({
       </button>
 
       {/* Dropdown menu */}
-      <div className="absolute right-0 mt-2 w-48 bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-xl shadow-elegant border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+      <div className="absolute right-0 mt-2 w-48 bg-card/90 backdrop-blur-md rounded-xl shadow-elegant border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
         <div className="py-2">
           {items.map((item) => {
             const isActive = currentPath === item.href;
@@ -190,7 +190,7 @@ function MobileNavigation({
                 target={isExternal ? "_blank" : undefined}
                 className={`block px-4 py-3 text-sm transition-all duration-300 rounded-lg mx-2 ${
                   isActive
-                    ? "bg-gradient-primary text-white shadow-card"
+                    ? "bg-primary text-card shadow-card"
                     : "text-foreground hover:bg-muted"
                 }`}
               >
