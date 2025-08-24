@@ -1,0 +1,46 @@
+{
+  "match": {
+    "id": "IPL2025-QF1",
+    "matchNumber": "Quarter Final 1",
+    "status": "LIVE",
+    "startTimeUTC": "2025-05-20T14:00:00Z",
+    "venue": {
+      "name": "Narendra Modi Stadium",
+      "city": "Ahmedabad"
+    },
+    "teams": ["GT", "CSK"],
+    "toss": "GT won the toss and elected to bat"
+  },
+  "live": {
+    "matchId": "IPL2025-QF1",
+    "innings": [
+      {
+        "battingTeam": "GT",
+        "runs": 187,
+        "wickets": 8,
+        "overs": 20
+      },
+      {
+        "battingTeam": "CSK",
+        "runs": 142,
+        "wickets": 6,
+        "overs": 16.3
+      }
+    ],
+    "currentOver": "16.3",
+    "target": 188,
+    "resultText": "GT needs 46 runs from 21 balls to win"
+  },
+  "next": {
+    "id": "IPL2025-QF2",
+    "matchNumber": "Quarter Final 2",
+    "status": "SCHEDULED",
+    "startTimeUTC": "2025-05-21T14:00:00Z",
+    "venue": {
+      "name": "Wankhede Stadium",
+      "city": "Mumbai"
+    },
+    "teams": ["MI", "RCB"],
+    "toss": null
+  }
+}
