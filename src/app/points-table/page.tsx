@@ -56,7 +56,6 @@ export default function PointsTablePage() {
       <section className="px-4 sm:px-6 lg:px-8 py-12 max-w-container mx-auto space-y-8">
         {isLoading && (
           <div className="bg-gradient-card rounded-xl p-12 text-center border border-border shadow-card">
-            <div className="text-4xl mb-4">⏳</div>
             <h3 className="text-2xl font-bold text-foreground mb-3">
               Loading Points Table
             </h3>
@@ -68,12 +67,9 @@ export default function PointsTablePage() {
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-8 shadow-card">
-            <div className="flex items-center gap-3">
-              <div className="text-red-500 text-xl">⚠</div>
-              <div>
-                <h3 className="font-semibold text-red-800">Data Error</h3>
-                <p className="text-red-700 text-sm mt-1">{error}</p>
-              </div>
+            <div>
+              <h3 className="font-semibold text-red-800">Data Error</h3>
+              <p className="text-red-700 text-sm mt-1">{error}</p>
             </div>
           </div>
         )}
