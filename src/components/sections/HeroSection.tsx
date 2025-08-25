@@ -11,7 +11,7 @@ export default function HeroSection() {
       <div className="relative z-10 flex items-center justify-center h-full text-center text-white">
         <div className="max-w-4xl px-6">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
-            IPL <span className="text-secondary">{APP_TEXT.hero.title}</span>
+            <span className="text-secondary">{APP_TEXT.hero.title}</span>
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl mx-auto">
             {APP_TEXT.hero.subtitle}
