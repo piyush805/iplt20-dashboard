@@ -3,6 +3,7 @@ import ClientStoreInitializer from "@/components/ClientStoreInitializer";
 import liveData from "@/fixtures/live.json";
 import { LiveResponse, MatchStatus, TeamId } from "@/server/types";
 
+// Main Page of the app "/"
 export default function HomePage() {
   // Transform the JSON data to match the expected types
   const transformLiveData = (): LiveResponse => {
@@ -45,6 +46,7 @@ export default function HomePage() {
 
   return (
     <>
+      {/* setup app state */}
       <ClientStoreInitializer initialLiveData={transformLiveData()} />
       <IPLVistaDashboard />
     </>

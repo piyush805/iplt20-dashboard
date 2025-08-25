@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+
 import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Navigation() {
@@ -158,9 +160,22 @@ function MobileNavigation({
   items: Array<{ href: string; label: string; icon: string }>;
   currentPath: string;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div className="relative group">
-      <button className="p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm">
+    <div className="relative">
+      <button
+        onClick={toggleMenu}
+        className="p-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm"
+      >
         <svg
           className="w-6 h-6"
           fill="none"
@@ -177,7 +192,11 @@ function MobileNavigation({
       </button>
 
       {/* Dropdown menu */}
-      <div className="absolute right-0 mt-2 w-48 bg-card/90 backdrop-blur-md rounded-xl shadow-elegant border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+      <div
+        className={`absolute right-0 mt-2 w-48 bg-card/90 backdrop-blur-md rounded-xl shadow-elegant border border-border transition-all duration-300 z-50 ${
+          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      >
         <div className="py-2">
           {items.map((item) => {
             const isActive = currentPath === item.href;
@@ -188,9 +207,10 @@ function MobileNavigation({
                 key={item.href}
                 href={item.href}
                 target={isExternal ? "_blank" : undefined}
+                onClick={closeMenu}
                 className={`block px-4 py-3 text-sm transition-all duration-300 rounded-lg mx-2 ${
                   isActive
-                    ? "bg-primary text-card shadow-card"
+                    ? "bg-primary text-white shadow-card font-medium"
                     : "text-foreground hover:bg-muted"
                 }`}
               >

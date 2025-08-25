@@ -1,10 +1,10 @@
 "use client";
 
 import { useAppStore } from "@/store/useAppStore";
+
 import HeroSection from "@/components/sections/HeroSection";
 import LiveMatchesSection from "@/components/sections/LiveMatchesSection";
 import UpcomingMatchesSection from "@/components/sections/UpcomingMatchesSection";
-import QuickActionsSection from "@/components/sections/QuickActionsSection";
 
 export default function IPLVistaDashboard() {
   const { livePayload, error } = useAppStore();
@@ -14,7 +14,6 @@ export default function IPLVistaDashboard() {
       <HeroSection />
       <LiveMatchesSection livePayload={livePayload} error={error} />
       <UpcomingMatchesSection livePayload={livePayload} />
-      <QuickActionsSection />
     </div>
   );
 }

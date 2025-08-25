@@ -25,24 +25,6 @@ export const APP_TEXT = {
     noMatchesDescription: "All matches for today have been completed",
   },
 
-  // Quick Actions Section
-  quickActions: {
-    title: "Explore IPL Vista",
-    schedule: {
-      title: "Match Schedule",
-      description:
-        "Complete IPL T20 match schedule with live scores and results",
-    },
-    points: {
-      title: "Points Table",
-      description: "Current standings and team performance in IPL T20 2024",
-    },
-    teams: {
-      title: "IPL Teams",
-      description: "Meet the 10 franchises competing in IPL T20 2024",
-    },
-  },
-
   // Schedule Section
   schedule: {
     filters: {
