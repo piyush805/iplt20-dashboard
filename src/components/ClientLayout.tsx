@@ -1,7 +1,8 @@
 "use client";
 
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import Navigation from "@/components/Navigation";
+import Navigation from "./Navigation";
+import PollingStatusIndicator from "./PollingStatusIndicator";
 
 export default function ClientLayout({
   children,
@@ -10,8 +11,11 @@ export default function ClientLayout({
 }) {
   return (
     <ThemeProvider>
-      <Navigation />
-      <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+      <div className="min-h-screen bg-background text-foreground">
+        <Navigation />
+        <main>{children}</main>
+        <PollingStatusIndicator />
+      </div>
     </ThemeProvider>
   );
 }

@@ -31,10 +31,39 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
 
         const data: LiveResponse = await response.json();
+
+        // SMART BUSINESS LOGIC: Check if we should stop polling
+        const currentMatch = data.match;
+
+        if (currentMatch?.status === "COMPLETED") {
+          // Stop polling when match is completed
+          console.log("Match completed, stopping live polling");
+          get().stopPollingLive();
+          return;
+        }
+
+        if (currentMatch?.status === "SCHEDULED") {
+          const matchTime = new Date(currentMatch.startTimeUTC);
+          const now = new Date();
+          const hoursUntilMatch =
+            (matchTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+          if (hoursUntilMatch > 2) {
+            // Stop polling if match is more than 2 hours away
+            console.log(
+              `Match is ${hoursUntilMatch.toFixed(
+                1
+              )} hours away, stopping live polling`
+            );
+            get().stopPollingLive();
+            return;
+          }
+        }
+
+        // Update store only if we should continue polling
         get().setLivePayload(data);
 
         // Adjust polling interval based on match status
-        const currentMatch = data.match;
         if (currentMatch?.status === "LIVE") {
           // Keep current fast polling for live matches
           console.log("Live match detected, maintaining fast polling");

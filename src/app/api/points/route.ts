@@ -1,45 +1,43 @@
 // src/app/api/points/route.ts
 import { NextResponse } from "next/server";
-import { PointsRepository } from "@/server/repos/points.repo";
-import { MemoryCache } from "@/lib/cache";
-
-// Create a singleton cache instance
-const cache = new MemoryCache();
-const pointsRepo = new PointsRepository(cache);
+import fs from "fs/promises";
+import path from "path";
+import { scrapePointsWithCheerio } from "@/server/scraper/iplt20.cheerio";
+import { Schemas } from "@/types";
 
 export async function GET() {
   try {
-    // Check if we should use dummy data (default to true for development)
-    if (process.env.USE_DUMMY !== "0") {
-      // Import and return fixture data
-      const fs = await import("fs/promises");
-      const path = await import("path");
+    console.log("Fetching live points table data...");
+
+    // Get live data from scraper
+    const result = await scrapePointsWithCheerio();
+
+    if (result.source === "json-feed") {
+      console.log("Live points table data fetched successfully");
+      return NextResponse.json(result.data);
+    } else {
+      console.log("Scraper failed, falling back to dummy data");
+      throw new Error("Scraper returned dummy data");
+    }
+  } catch (error) {
+    console.error("Error fetching live points data:", error);
+
+    // Fallback to dummy data if scraper fails
+    try {
       const fixturePath = path.join(process.cwd(), "src/fixtures/points.json");
       const raw = await fs.readFile(fixturePath, "utf8");
       const data = JSON.parse(raw);
 
-      return NextResponse.json(data);
-    }
-
-    // Use repository to get cached or scraped data
-    const pointsData = await pointsRepo.getCachedOrScrape();
-
-    return NextResponse.json(pointsData);
-  } catch (error) {
-    console.error("Error in /api/points:", error);
-
-    // Try to return fallback data on error
-    try {
-      const fs = await import("fs/promises");
-      const path = await import("path");
-      const fixturePath = path.join(process.cwd(), "src/fixtures/points.json");
-      const raw = await fs.readFile(fixturePath, "utf8");
-      const fallbackData = JSON.parse(raw);
-
-      return NextResponse.json(fallbackData);
-    } catch {
+      console.log("Serving fallback dummy data");
+      const validated = Schemas.PointsTable.parse(data);
+      return NextResponse.json(validated);
+    } catch (fallbackError) {
+      console.error("Fallback data also failed:", fallbackError);
       return NextResponse.json(
-        { error: "Failed to fetch points data" },
+        {
+          error:
+            "Failed to fetch points data from both live and fallback sources",
+        },
         { status: 500 }
       );
     }

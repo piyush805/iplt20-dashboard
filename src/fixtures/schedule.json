@@ -22,8 +22,7 @@
         "name": "Wankhede Stadium",
         "city": "Mumbai"
       },
-      "teams": ["MI", "RCB"],
-      "toss": null
+      "teams": ["MI", "RCB"]
     },
     {
       "id": "IPL2025-QF3",
@@ -34,8 +33,7 @@
         "name": "Eden Gardens",
         "city": "Kolkata"
       },
-      "teams": ["KKR", "SRH"],
-      "toss": null
+      "teams": ["KKR", "SRH"]
     },
     {
       "id": "IPL2025-QF4",
@@ -46,8 +44,7 @@
         "name": "Arun Jaitley Stadium",
         "city": "Delhi"
       },
-      "teams": ["PBKS", "RR"],
-      "toss": null
+      "teams": ["PBKS", "RR"]
     },
     {
       "id": "IPL2025-SF1",
@@ -58,8 +55,7 @@
         "name": "Narendra Modi Stadium",
         "city": "Ahmedabad"
       },
-      "teams": ["TBD", "TBD"],
-      "toss": null
+      "teams": ["CSK", "MI"]
     },
     {
       "id": "IPL2025-SF2",
@@ -70,8 +66,7 @@
         "name": "Wankhede Stadium",
         "city": "Mumbai"
       },
-      "teams": ["TBD", "TBD"],
-      "toss": null
+      "teams": ["RCB", "KKR"]
     },
     {
       "id": "IPL2025-FINAL",
@@ -82,8 +77,7 @@
         "name": "Narendra Modi Stadium",
         "city": "Ahmedabad"
       },
-      "teams": ["TBD", "TBD"],
-      "toss": null
+      "teams": ["GT", "CSK"]
     }
   ]
 }
