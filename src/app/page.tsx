@@ -1,7 +1,7 @@
 import IPLVistaDashboard from "@/components/IPLVistaDashboard";
 import ClientStoreInitializer from "@/components/ClientStoreInitializer";
 import liveData from "@/fixtures/live.json";
-import { LiveResponse, MatchStatus, TeamId } from "@/server/types";
+import { LiveResponse, MatchStatus, TeamId } from "@/types";
 
 // Main Page of the app "/"
 export default function HomePage() {

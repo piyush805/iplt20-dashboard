@@ -1,28 +1,6 @@
 // src/store/useAppStore.ts
 import { create } from "zustand";
-import { LiveResponse, PointsTable, ScheduleResponse } from "@/server/types";
-
-type AppState = {
-  livePayload: LiveResponse | null;
-  points: PointsTable | null;
-  schedule: ScheduleResponse | null;
-  isLoading: boolean;
-  error: string | null;
-
-  // Actions
-  setLivePayload: (payload: LiveResponse) => void;
-  setPoints: (points: PointsTable) => void;
-  setSchedule: (schedule: ScheduleResponse) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-
-  // Polling controls
-  startPollingLive: (intervalMs?: number) => void;
-  stopPollingLive: () => void;
-
-  // Internal polling state
-  _poller: number | null;
-};
+import { LiveResponse, AppState, PollingHook } from "@/types";
 
 export const useAppStore = create<AppState>((set, get) => ({
   livePayload: null,
@@ -93,7 +71,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 }));
 
 // Helper hook for easy polling management
-export const usePolling = () => {
+export const usePolling = (): PollingHook => {
   const { startPollingLive, stopPollingLive, _poller } = useAppStore();
 
   return {

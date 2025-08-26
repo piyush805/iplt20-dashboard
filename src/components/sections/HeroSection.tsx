@@ -1,5 +1,6 @@
 import BackgroundCarousel from "@/components/BackgroundCarousel";
 import ActionButton from "@/components/ui/ActionButton";
+
 import { APP_TEXT } from "@/constants/text";
 
 export default function HeroSection() {

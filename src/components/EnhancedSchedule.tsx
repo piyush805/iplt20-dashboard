@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { MatchStatus } from "@/server/types";
+import { MatchStatus, Match, TeamId } from "@/types";
 import ScheduleFilters from "@/components/schedule/ScheduleFilters";
 import ScheduleGroups from "@/components/schedule/ScheduleGroups";
 import { APP_TEXT } from "@/constants/text";
@@ -22,13 +22,15 @@ export default function EnhancedSchedule({
 
     // Filter by status
     if (statusFilter !== "ALL") {
-      filtered = filtered.filter((match) => match.status === statusFilter);
+      filtered = filtered.filter(
+        (match: Match) => match.status === statusFilter
+      );
     }
 
     // Filter by team
     if (teamFilter !== "ALL") {
-      filtered = filtered.filter((match) =>
-        match.teams.includes(teamFilter as never)
+      filtered = filtered.filter((match: Match) =>
+        match.teams.includes(teamFilter as TeamId)
       );
     }
 
@@ -36,7 +38,7 @@ export default function EnhancedSchedule({
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        (match) =>
+        (match: Match) =>
           match.venue.name.toLowerCase().includes(query) ||
           (match.venue.city &&
             match.venue.city.toLowerCase().includes(query)) ||
@@ -51,13 +53,13 @@ export default function EnhancedSchedule({
 
   // Group matches by status for better organization
   const groupedMatches = useMemo(() => {
-    const groups: Record<MatchStatus, any[]> = {
+    const groups: Record<MatchStatus, Match[]> = {
       LIVE: [],
       SCHEDULED: [],
       COMPLETED: [],
     };
 
-    filteredMatches.forEach((match) => {
+    filteredMatches.forEach((match: Match) => {
       groups[match.status].push(match);
     });
 
@@ -65,7 +67,10 @@ export default function EnhancedSchedule({
   }, [filteredMatches]);
 
   const getStatusCount = (status: MatchStatus) => {
-    return initialData?.matches?.filter((m) => m.status === status).length || 0;
+    return (
+      initialData?.matches?.filter((m: Match) => m.status === status).length ||
+      0
+    );
   };
 
   if (!initialData?.matches) {

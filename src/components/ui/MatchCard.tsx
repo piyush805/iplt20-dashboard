@@ -1,6 +1,6 @@
 "use client";
 
-import { Match, LiveScore } from "@/server/types";
+import { Match, LiveScore } from "@/types";
 import { getMatchStatus, isMatchLive } from "@/utils/time";
 import { getTeamConfig } from "@/utils/teams";
 import Image from "next/image";
@@ -26,7 +26,10 @@ export default function MatchCard({
   const team2Config = getTeamConfig(match.teams[1]);
 
   // Handle TBD (To Be Determined) matches
-  if ((match.teams[0] as string) === "TBD" || (match.teams[1] as string) === "TBD") {
+  if (
+    (match.teams[0] as string) === "TBD" ||
+    (match.teams[1] as string) === "TBD"
+  ) {
     return (
       <div
         className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-200 dark:border-slate-700 ${className}`}

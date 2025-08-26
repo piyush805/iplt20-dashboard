@@ -1,6 +1,6 @@
 // src/server/repos/schedule.repo.ts
 import { Cache } from "@/lib/cache";
-import { ScheduleResponse } from "@/server/types";
+import { ScheduleResponse, Schemas } from "@/types";
 import {
   scrapeScheduleWithCheerio,
   ScrapeResult,
@@ -74,7 +74,7 @@ export class ScheduleRepository {
       }
 
       // Validate the scraped data
-      const validated = ScheduleResponse.parse(scrapeResult.data);
+      const validated = Schemas.ScheduleResponse.parse(scrapeResult.data);
       scrapeResult.data = validated;
 
       // Cache the result with appropriate TTL
@@ -123,7 +123,7 @@ export class ScheduleRepository {
       );
       const raw = await fs.readFile(fixturePath, "utf8");
       const data = JSON.parse(raw);
-      return ScheduleResponse.parse(data);
+      return Schemas.ScheduleResponse.parse(data);
     } catch (error) {
       console.error("Error loading schedule fallback data:", error);
 

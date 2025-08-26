@@ -1,5 +1,5 @@
 // src/utils/teams.ts
-import { TeamId } from "@/server/types";
+import { TeamId } from "@/types";
 
 export interface TeamConfig {
   id: TeamId;

@@ -1,11 +1,6 @@
 // src/server/scraper/iplt20.cheerio.ts
 import * as cheerio from "cheerio";
-import {
-  LiveResponse,
-  PointsTable,
-  ScheduleResponse,
-  TeamId,
-} from "@/server/types";
+import { LiveResponse, PointsTable, ScheduleResponse, TeamId } from "@/types";
 
 export type ScrapeResult<T> = {
   data: T;

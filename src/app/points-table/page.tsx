@@ -3,7 +3,7 @@
 // src/app/points-table/page.tsx - Dedicated Points Table Page
 import React, { useEffect, useState } from "react";
 import PointsTableComponent from "@/components/ui/PointsTable";
-import { PointsTable } from "@/server/types";
+import { PointsTable } from "@/types";
 
 export default function PointsTablePage() {
   const [pointsData, setPointsData] = useState<PointsTable | null>(null);

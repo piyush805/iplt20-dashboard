@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useAppStore } from "@/store/useAppStore";
-import { LiveResponse } from "@/server/types";
+import { LiveResponse } from "@/types";
 
 interface ClientStoreInitializerProps {
   initialLiveData?: LiveResponse | null;

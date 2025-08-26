@@ -1,5 +1,14 @@
-// UI Component Types
-export * from "./ui";
+// src/types/index.ts
+// Main export file for all types
 
-// Data Types
-export * from "./data";
+// Core schemas (Zod) - export as schemas
+export * as Schemas from "./schemas";
+
+// Core entities (TypeScript interfaces) - main types
+export * from "./entities";
+
+// Store types
+export * from "./store";
+
+// Component types
+export * from "./components";

@@ -1,6 +1,6 @@
 // src/app/schedule/page.tsx - Enhanced Schedule Page
 import React from "react";
-import { ScheduleResponse } from "@/server/types";
+import { ScheduleResponse } from "@/types";
 import { ScheduleRepository } from "@/server/repos/schedule.repo";
 import { MemoryCache } from "@/lib/cache";
 import EnhancedSchedule from "@/components/EnhancedSchedule";

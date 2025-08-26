@@ -1,6 +1,6 @@
 // src/server/repos/live.repo.ts
 import { Cache } from "@/lib/cache";
-import { LiveResponse } from "@/server/types";
+import { LiveResponse, Schemas } from "@/types";
 import {
   scrapeLiveWithCheerio,
   ScrapeResult,
@@ -81,7 +81,7 @@ export class LiveRepository {
       }
 
       // Validate the scraped data
-      const validated = LiveResponse.parse(scrapeResult.data);
+      const validated = Schemas.LiveResponse.parse(scrapeResult.data);
       scrapeResult.data = validated;
 
       // Cache the result with appropriate TTL
@@ -127,7 +127,7 @@ export class LiveRepository {
       const fixturePath = path.join(process.cwd(), "src/fixtures/live.json");
       const raw = await fs.readFile(fixturePath, "utf8");
       const data = JSON.parse(raw);
-      return LiveResponse.parse(data);
+      return Schemas.LiveResponse.parse(data);
     } catch (error) {
       console.error("Error loading fallback data:", error);
 

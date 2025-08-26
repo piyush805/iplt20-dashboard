@@ -1,6 +1,6 @@
 // src/server/repos/points.repo.ts
 import { Cache } from "@/lib/cache";
-import { PointsTable } from "@/server/types";
+import { PointsTable, Schemas } from "@/types";
 import {
   scrapePointsWithCheerio,
   ScrapeResult,
@@ -83,7 +83,7 @@ export class PointsRepository {
       }
 
       // Validate the scraped data
-      const validated = PointsTable.parse(scrapeResult.data);
+      const validated = Schemas.PointsTable.parse(scrapeResult.data);
       scrapeResult.data = validated;
 
       // Cache the result with appropriate TTL
@@ -129,7 +129,7 @@ export class PointsRepository {
       const fixturePath = path.join(process.cwd(), "src/fixtures/points.json");
       const raw = await fs.readFile(fixturePath, "utf8");
       const data = JSON.parse(raw);
-      return PointsTable.parse(data);
+      return Schemas.PointsTable.parse(data);
     } catch (error) {
       console.error("Error loading points table fallback data:", error);
 

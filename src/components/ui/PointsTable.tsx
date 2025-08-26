@@ -1,6 +1,6 @@
 "use client";
 
-import { PointsTable as PointsTableType } from "@/server/types";
+import { PointsTable as PointsTableType } from "@/types";
 import PointsTableHeader from "@/components/points/PointsTableHeader";
 import PointsTableRow from "@/components/points/PointsTableRow";
 import { APP_TEXT } from "@/constants/text";
