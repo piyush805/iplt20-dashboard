@@ -206,9 +206,9 @@ export async function scrapePointsWithCheerio(): Promise<
   try {
     console.log("Attempting to scrape points table from IPL JSON feed...");
 
-    // Calculate points table from match results since the feed contains all match data
-    console.log("Calculating points table from match results...");
-    return await calculatePointsFromMatches();
+    // Fetch points table from group standings endpoint
+    console.log("Fetching points table from group standings...");
+    return await fetchPointsFromStandings();
   } catch (error) {
     console.error("Error scraping points table:", error);
 
@@ -224,171 +224,77 @@ export async function scrapePointsWithCheerio(): Promise<
   }
 }
 
-// Helper function to calculate points table from match results
-async function calculatePointsFromMatches(): Promise<
-  ScrapeResult<PointsTable>
-> {
+// Helper function to fetch points table from group standings endpoint
+async function fetchPointsFromStandings(): Promise<ScrapeResult<PointsTable>> {
   try {
-    console.log("Calculating points table from match results...");
+    console.log("Fetching points table from group standings endpoint...");
 
     const url = `${
       SCRAPER_CONFIG.baseUrl
-    }/ipl/feeds/203-matchschedule.js?MatchSchedule=_jqjsp&_${Date.now()}=`;
+    }/ipl/feeds/stats/203-groupstandings.js?ongroupstandings=_jqjsp&_${Date.now()}=`;
     const response = await fetchWithRetry(url);
+    console.log("Raw response length:", response.length);
+    console.log("Response starts with:", response.substring(0, 100));
 
-    // The response format is MatchSchedule({...})
-    const jsonMatch = response.match(/MatchSchedule\((\{[\s\S]*?\})\)/);
+    // The response format is ongroupstandings({...})
+    const jsonMatch = response.match(/ongroupstandings\((\{[\s\S]*?\})\)/);
     if (!jsonMatch) {
-      throw new Error("Could not extract JSON data from response");
+      console.error(
+        "Regex failed. Response preview:",
+        response.substring(0, 500)
+      );
+      throw new Error(
+        "Could not extract JSON data from group standings response"
+      );
     }
 
     const jsonData = JSON.parse(jsonMatch[1]);
+    console.log("Group standings data structure:", Object.keys(jsonData));
 
-    // Filter completed matches
-    const completedMatches = jsonData.Matchsummary.filter(
-      (match: any) => match.MatchStatus === "Post"
-    );
+    if (!jsonData.points || !Array.isArray(jsonData.points)) {
+      throw new Error("No points data found in group standings response");
+    }
 
-    console.log(`Found ${completedMatches.length} completed matches`);
+    const standings = jsonData.points;
+    console.log(`Found ${standings.length} teams in standings`);
 
-    // Calculate points for each team
-    const teamStats: Record<string, any> = {};
+    const pointsRows = standings.map((team: any) => {
+      // Parse "ForTeams": "2447/246.4" format
+      const forTeams = team.ForTeams?.split("/") || ["0", "0"];
+      const againstTeam = team.AgainstTeam?.split("/") || ["0", "0"];
 
-    completedMatches.forEach((match: any) => {
-      const team1 = match.FirstBattingTeamName;
-      const team2 = match.SecondBattingTeamName;
-      const winner = match.WinningTeamID;
-      const team1ID = match.FirstBattingTeamID;
-      const team2ID = match.SecondBattingTeamID;
+      // Parse "Performance": "W,W,W,L,W" format
+      const performance = team.Performance?.split(",").map((p: string) => {
+        if (p === "W") return "W";
+        if (p === "L") return "L";
+        return "N"; // Default to N for any other values
+      }) || ["N", "N", "N", "N", "N"];
 
-      // Initialize team stats if not exists
-      if (!teamStats[team1]) {
-        teamStats[team1] = {
-          played: 0,
-          won: 0,
-          lost: 0,
-          tied: 0,
-          nr: 0,
-          points: 0,
-        };
-      }
-      if (!teamStats[team2]) {
-        teamStats[team2] = {
-          played: 0,
-          won: 0,
-          lost: 0,
-          tied: 0,
-          nr: 0,
-          points: 0,
-        };
-      }
-
-      // Update stats
-      teamStats[team1].played++;
-      teamStats[team2].played++;
-
-      // Debug logging for first few matches
-      if (Object.keys(teamStats).length <= 4) {
-        console.log(`Match: ${team1} vs ${team2}`);
-        console.log(`Winner ID: ${winner}, Type: ${typeof winner}`);
-        console.log(`Team1 ID: ${team1ID}, Type: ${typeof team1ID}`);
-        console.log(`Team2 ID: ${team2ID}, Type: ${typeof team2ID}`);
-      }
-
-      // Convert IDs to strings for comparison
-      const winnerStr = String(winner);
-      const team1IDStr = String(team1ID);
-      const team2IDStr = String(team2ID);
-
-      if (winnerStr === team1IDStr) {
-        teamStats[team1].won++;
-        teamStats[team1].points += 2;
-        teamStats[team2].lost++;
-        if (Object.keys(teamStats).length <= 4) console.log(`${team1} won`);
-      } else if (winnerStr === team2IDStr) {
-        teamStats[team2].won++;
-        teamStats[team2].points += 2;
-        teamStats[team1].lost++;
-        if (Object.keys(teamStats).length <= 4) console.log(`${team2} won`);
-      } else {
-        // Tie or no result
-        teamStats[team1].tied++;
-        teamStats[team2].tied++;
-        teamStats[team1].points += 1;
-        teamStats[team2].points += 1;
-        if (Object.keys(teamStats).length <= 4)
-          console.log(
-            `❌ Match marked as tie - winner: ${winner}, team1ID: ${team1ID}, team2ID: ${team2ID}`
-          );
-      }
+      return {
+        team: team.TeamCode as TeamId,
+        played: parseInt(team.Matches) || 0,
+        won: parseInt(team.Wins) || 0,
+        lost: parseInt(team.Loss) || 0,
+        tied: parseInt(team.Tied) || 0,
+        nr: parseInt(team.NoResult) || 0,
+        nrr: parseFloat(team.NetRunRate) || 0,
+        for: {
+          runs: parseInt(forTeams[0]) || 0,
+          overs: parseFloat(forTeams[1]) || 0,
+        },
+        against: {
+          runs: parseInt(againstTeam[0]) || 0,
+          overs: parseFloat(againstTeam[1]) || 0,
+        },
+        points: parseInt(team.Points) || 0,
+        form: performance.slice(0, 5) as ("N" | "W" | "L")[],
+      };
     });
 
-    // Calculate recent form for each team (last 5 matches)
-    const teamForm: Record<string, ("W" | "L" | "N")[]> = {};
+    // Sort by points (highest first)
+    pointsRows.sort((a: any, b: any) => b.points - a.points);
 
-    // Sort matches by date (most recent first) to get proper form order
-    const sortedMatches = [...completedMatches].sort(
-      (a, b) =>
-        new Date(b.MatchDate).getTime() - new Date(a.MatchDate).getTime()
-    );
-
-    // Calculate form for each team
-    Object.keys(teamStats).forEach((teamName) => {
-      teamForm[teamName] = [];
-
-      // Get all matches for this team
-      const teamMatches = sortedMatches.filter(
-        (match) =>
-          match.FirstBattingTeamName === teamName ||
-          match.SecondBattingTeamName === teamName
-      );
-
-      // Get last 5 matches and determine result for each
-      for (let i = 0; i < Math.min(5, teamMatches.length); i++) {
-        const match = teamMatches[i];
-        const winner = String(match.WinningTeamID);
-        const team1ID = String(match.FirstBattingTeamID);
-        const team2ID = String(match.SecondBattingTeamID);
-
-        if (winner === team1ID && match.FirstBattingTeamName === teamName) {
-          teamForm[teamName].push("W");
-        } else if (
-          winner === team2ID &&
-          match.SecondBattingTeamName === teamName
-        ) {
-          teamForm[teamName].push("W");
-        } else if (winner === "0" || winner === "" || winner === "null") {
-          teamForm[teamName].push("N"); // Treat tie/no result as "N" for form
-        } else {
-          teamForm[teamName].push("L");
-        }
-      }
-
-      // Pad with "N" if less than 5 matches
-      while (teamForm[teamName].length < 5) {
-        teamForm[teamName].unshift("N");
-      }
-    });
-
-    // Convert to points table format
-    const pointsRows = Object.entries(teamStats).map(([teamName, stats]) => ({
-      team: normalizeTeamName(teamName),
-      played: stats.played,
-      won: stats.won,
-      lost: stats.lost,
-      tied: stats.tied,
-      nr: stats.nr,
-      nrr: 0, // NRR calculation would be more complex
-      for: { runs: 0, overs: 0 }, // Would need to calculate from match details
-      against: { runs: 0, overs: 0 },
-      points: stats.points,
-      form: teamForm[teamName] as ("N" | "W" | "L")[],
-    }));
-
-    // Sort by points (descending)
-    pointsRows.sort((a, b) => b.points - a.points);
-
-    console.log(`Calculated points for ${pointsRows.length} teams`);
+    console.log(`Processed ${pointsRows.length} teams from standings`);
 
     return {
       data: {
@@ -400,7 +306,7 @@ async function calculatePointsFromMatches(): Promise<
       source: "json-feed",
     };
   } catch (error) {
-    console.error("Error calculating points from matches:", error);
+    console.error("Error fetching points from standings:", error);
     throw error;
   }
 }
